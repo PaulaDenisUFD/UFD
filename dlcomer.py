@@ -4,10 +4,11 @@ import os
 from pathlib import Path
 from datetime import datetime
 import win32com.client
+import json
+from configuracion import *
+
 
 def get_latest_downloaded_file(directory_path):
-
-
     # print(directory_path)
     # print(directory_path.exists())
     # print(directory_path.is_dir())
@@ -53,8 +54,7 @@ def enviar_correo(destinatario,cc,cco, asunto, ruta_archivo):
         <body>
         <p>Buenos días,</p>
         <p>Adjunto la extracción de esta semana<p>
-        <p><p> 
-        <p>Saludos,</p>
+        {FIRMA_HTML}
         </body>
         </html>
         """
@@ -84,7 +84,7 @@ def cargar_csv_a_pandas(ar1,ar2, ruta_fin):
         df1 = pd.read_csv(ar1)
         print(f"Archivo '{ar1.name}' leído con éxito.")
         df2 = pd.read_csv(ar2)
-        print(f"Archivo '{ar2}' leído con éxito.")
+        print(f"Archivo '{ar2.name}' leído con éxito.")
 
         # Asegurarnos de que las columnas sean las mismas
         if list(df1.columns) == list(df2.columns):
@@ -122,7 +122,6 @@ def cargar_csv_a_pandas(ar1,ar2, ruta_fin):
         # Filtrar el DataFrame eliminando todas las filas duplicadas
         df_combinado = df_combinado[~duplicados]
 
-    
 
         # Obtener la fecha de hoy en formato YYYY-MM-DD
         fecha_hoy = datetime.now().strftime("%d-%m-%Y")
@@ -140,19 +139,13 @@ def cargar_csv_a_pandas(ar1,ar2, ruta_fin):
     
 
 
-     
-
 
 def main():
-    directory = Path.home() / "Downloads"
-    latest_file, second_file = get_latest_downloaded_file(directory)
+    latest_file, second_file = get_latest_downloaded_file(RUTA_DESCARGAS)
 
-    ruta_archivo = Path("./input")
-    ruta_archivo_fin = Path("./output")
+    ar1 = RUTA_ENTRADA / latest_file.name
+    ar2 = RUTA_ENTRADA / second_file.name
 
-
-    ar1 = ruta_archivo / latest_file.name
-    ar2 = ruta_archivo / second_file.name
     latest_file.rename(ar1)
     second_file.rename(ar2)
 
@@ -160,20 +153,16 @@ def main():
     print(ar2)
 
 
-    archivo_envio = cargar_csv_a_pandas(ar1,ar2, ruta_archivo_fin)
+    archivo_envio = cargar_csv_a_pandas(ar1,ar2, RUTA_SALIDA)
 
-    path_envio = Path(r'C:\Users\uf754247\OneDrive - NATURGY INFORMATICA S.A\mis cosas\programas\datalake_comer\output')
+    # path_envio = Path(r'C:\Users\uf754247\OneDrive - NATURGY INFORMATICA S.A\mis cosas\programas\datalake_comer\output')
+    path_envio = RUTA_SALIDA
     path_envio = path_envio / archivo_envio.name
 
-    destinatario = ['jmartini@ufd.es', 'scalvor@ufd.es', 'imartinm@ufd.es']
-    cc = ['']
-    cco = ['pdenisr@ufd.es']
-    # destinatario = ['pdenisr@ufd.es']
-    # cc = ['']
-    # cco = ['']
+
     asunto = f'Datalake Comer'
 
-    enviar_correo(destinatario, cc, cco, asunto, path_envio)
+    enviar_correo(DESTINATARIOS, CC, CCO, asunto, path_envio)
     
 
 main()
