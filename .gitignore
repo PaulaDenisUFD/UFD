@@ -1,0 +1,28 @@
+# Carpetas a ignorar
+/input/
+/output/
+
+# Archivos temporales de Python
+__pycache__/
+*.py[cod]
+*.so
+
+# Archivos de configuración del sistema o IDE
+*.log
+*.tmp
+*.bak
+*.swp
+
+# Archivos de Excel generados
+*.xlsx
+
+# Entornos virtuales
+.venv/
+env/
+venv/
+
+# Archivos de configuración específicos de VSCode
+.vscode/
+
+# OneDrive sync files
+*.tmp.driveupload
