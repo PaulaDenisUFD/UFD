@@ -8,6 +8,14 @@ import json
 from configuracion import *
 
 
+# Función para eliminar archivos en un directorio
+def eliminar_archivos(directorio):
+    archivos = list(directorio.glob('*'))  # Obtener todos los archivos en el directorio
+    for archivo in archivos:
+        if archivo.is_file():  # Verificar que realmente es un archivo
+            print(f"Eliminando archivo: {archivo}")
+            archivo.unlink()  # Eliminar el archivo
+
 def get_latest_downloaded_file(directory_path):
     # print(directory_path)
     # print(directory_path.exists())
@@ -141,6 +149,9 @@ def cargar_csv_a_pandas(ar1,ar2, ruta_fin):
 
 
 def main():
+
+    eliminar_archivos(RUTA_ENTRADA)
+    eliminar_archivos(RUTA_SALIDA)
     latest_file, second_file = get_latest_downloaded_file(RUTA_DESCARGAS)
 
     ar1 = RUTA_ENTRADA / latest_file.name
@@ -162,7 +173,7 @@ def main():
 
     asunto = f'Datalake Comer'
 
-    enviar_correo(DESTINATARIOS, CC, CCO, asunto, path_envio)
+    # enviar_correo(DESTINATARIOS, CC, CCO, asunto, path_envio)
     
 
 main()
