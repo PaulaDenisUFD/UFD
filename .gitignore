@@ -12,6 +12,7 @@ __pycache__/
 *.tmp
 *.bak
 *.swp
+configuracion.py
 
 # Archivos de Excel generados
 *.xlsx
